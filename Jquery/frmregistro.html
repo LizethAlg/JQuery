@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro de Estudiantes</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col">
+            <h2 class="text-left text-primary">Registro de Estudiante</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <form id="formularioEstudiante">
+                <div class="form-group">
+                    <label for="ci">CI:</label>
+                    <input type="number" id="ci" name="ci" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="fecha">Fecha de Nacimiento:</label>
+                    <input type="date" id="fecha" name="fecha" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="direccion">Dirección:</label>
+                    <input type="text" id="direccion" name="direccion" class="form-control" required>
+                </div>
+                <button type="button" id="registrarEstudiante" class="btn btn-primary">Registrar Estudiante</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col">
+            <h2 class="text-left text-primary">Estudiantes Registrados</h2>
+            <table id="tablaEstudiantes" class="table">
+                <thead class="bg-primary text-white">
+                    <tr>
+                        <th>CI</th>
+                        <th>Nombre</th>
+                        <th>Fecha de Nacimiento</th>
+                        <th>Dirección</th>
+                    </tr>
+                </thead>
+                <tbody id="listaEstudiantes"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col">
+            <button type="button" id="exportarJSON" class="btn btn-success">Exportar a JSON</button>
+            <button type="button" id="exportarExcel" class="btn btn-info">Exportar a Excel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function(){
+    var estudiantes = []; // Array para almacenar los estudiantes
+
+    $('#registrarEstudiante').click(function(){
+        var ci = $('#ci').val();
+        var nombre = $('#nombre').val();
+        var fecha = $('#fecha').val();
+        var direccion = $('#direccion').val();
+
+        // Verificar si el estudiante ya está registrado
+        var estudianteExistente = estudiantes.find(function(estudiante) {
+            return estudiante.ci === ci;
+        });
+
+        if (estudianteExistente) {
+            alert('El estudiante ya está registrado.');
+            return;
+        }
+
+        // Crear un objeto con los datos del estudiante
+        var estudiante = {
+            ci: ci,
+            nombre: nombre,
+            fecha: fecha,
+            direccion: direccion
+        };
+
+        // Agregar el estudiante al array
+        estudiantes.push(estudiante);
+
+        // Limpiar los campos del formulario
+        $('#ci').val('');
+        $('#nombre').val('');
+        $('#fecha').val('');
+        $('#direccion').val('');
+
+        // Mostrar mensaje de registro y mostrar lista de estudiantes
+        console.log("Registro del estudiante:", estudiante);
+        mostrarEstudiantes();
+    });
+
+    function mostrarEstudiantes() {
+        $('#listaEstudiantes').empty();
+        estudiantes.forEach(function(estudiante, index){
+            var claseRegistro = index % 2 === 0 ? 'registro-par' : 'registro-impar';
+            var fila = '<tr class="' + claseRegistro + '">';
+            fila += '<td>' + estudiante.ci + '</td>';
+            fila += '<td>' + estudiante.nombre + '</td>';
+            fila += '<td>' + estudiante.fecha + '</td>';
+            fila += '<td>' + estudiante.direccion + '</td>';
+            fila += '</tr>';
+            $('#listaEstudiantes').append(fila);
+        });
+    }
+});
+</script>
+
+</body>
+</html>
+
